@@ -17,6 +17,52 @@ if(!isset($_SESSION['username']))
 {header('location:../login.php');}
 
 
+
+
+if(isset($_POST['addcat']))
+{
+     if($_POST['Purpose']!=""&&$_POST['Property_type']!="Select Type"&&$_POST['subtype']!="Select Sub Type"&&$_POST['Select_city']!=""&&$_POST['Location']!=""&&$_POST['Property_Title']!=""&&$_POST['Description']!=""&&$_POST['Price']!=""&&$_POST['Land_area']!=""&&$_POST['Unit']!=""&&$_POST['Bedrooms']!=""&&$_POST['Bathrooms']!=""&&$_POST['phone_no']!=""&&$_POST['cell_no']!=""&&$_POST['Email']!=""&&$_POST['customer_id']!="")
+    {
+
+$Purpose=$_POST['Purpose'];
+$Property_type=$_POST['Property_type'];
+$subtype=$_POST['subtype'];
+$Select_city=$_POST['Select_city'];
+$Location=$_POST['Location'];
+$Property_Title=$_POST['Property_Title'];
+$Description=$_POST['Description'];
+$Price=$_POST['Price'];
+$Land_area=$_POST['Land_area'];
+$Unit=$_POST['Unit'];
+$Bedrooms=$_POST['Bedrooms'];
+$Bathrooms=$_POST['Bathrooms'];
+$phone_no=$_POST['phone_no'];
+$cell_no=$_POST['cell_no'];
+$Email=$_POST['Email'];
+$customer_id=$_POST['customer_id'];
+$date_time=$_POST['date_time'];
+$statuss=$_POST['statuss'];
+$max_num=$_POST['max_num'];
+
+
+      
+  
+          $insert="INSERT INTO `econstruction`.`realstate_admin` (`Purpose`, `Property_type`, `subtype`, `Select_city`, `Location`,`Property_Title`, `Description`, `Price`, `Land_area`, `Unit`,`Bedrooms`, `Bathrooms`, `phone_no`, `cell_no`,`Email`, `customer_id`,`date_time`,`statuss`,`max_num`) VALUES ('$Purpose', '$Property_type', '$subtype', '$Select_city','$Location','$Property_Title','$Description','$Price','$Land_area','$Unit','$Bedrooms','$Bathrooms','$phone_no','$cell_no','$Email','$customer_id', '$date_time','$statuss','$max_num')";
+         $insert_pc=mysqli_query($conn,$insert);
+       if($insert_pc)
+    {
+        echo "<script>alert('Property Has been Insert!')</script>";
+
+}
+    }
+    else{
+        echo "<script>alert('Please Fill All Fields!')</script>";
+        }
+}
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,21 +104,27 @@ function getProname(val) {
 <body>
 
 
-    <div id="top" class="nav-fixed"><!--top begin-->
+    <div id="top" class="nav-fixed" style="height: 35px;"><!--top begin-->
         <div class="container"><!--top container begin-->
             <!--col-md-6 offer-->
             <div class="col-md-5 offer"></div>
             <!--col-md-6 offer finish-->
             <div class="col-md-7"><!--col-md-6 begin-->
                 <ul class="menu">
-                    <li>
+                    <!-- <li>
                         <a href="register.php"><i class="glyphicon glyphicon-user"></i> sign in</a>
                     </li>
                     <li>
                         <a href="logout.php"><i class="glyphicon glyphicon-user"></i> logout</a>
-                    </li>
-                    <li>
-                        <a href=""><i class="glyphicon glyphicon-user"></i> My Ads</a>
+                    </li> -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span><i class="fa fa-user-circle" style="font-size: 20px; color: white;"></i></span></a>
+                        <ul class="dropdown-menu">
+                          <li><a class="fa fa-power-off" href="../adminlogout.php" style="color: black;"> Logout</a></li>
+                          <li><a class="fa fa-power-off" href="adminlogout.php" style="color: black;"> MyAds</a></li>
+                          <li><a class="fa fa-power-off" href="adminlogout.php" style="color: black;"> Signin</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div><!--col-md-6 finish-->
@@ -112,12 +164,12 @@ function getProname(val) {
     <div class="container">
         <div class="padding-nav"><!--padding-nav start-->
             <ul class="nav navbar-nav left"><!--navbar-nav start-->
-               <li><a href="index.php">Home</a></li>
-               <li><a href="#">plots</a></li>
-               <li><a href="#">Architectural Solution</a></li>
+               <li><a href="../index.php">Home</a></li>
+               <li><a href="../archetectural-solution/viewArchetecturalDesign.php">Architectural Solution</a></li>
                <li><a href="#">Materials</a></li>
-               <li><a href="#">Services</a></li>
+               <li><a href="../serviceUpdate/services.php">Services</a></li>
                <li><a href="#">Real State</a></li>
+               <li><a href="realstate.php">Add Property</a></li>
             </ul><!--navbar-nav finish-->
         </div><!--padding-nav-->
         <div class="social-icon pull-right">
@@ -137,13 +189,14 @@ function getProname(val) {
         <div class="container"> 
 
 
-	<form method="post" name="image_upload_form" id="image_upload_form" enctype="multipart/form-data" action="upload_image.php" class="properity-form"> 
+	<form method="post" enctype="multipart/form-data" class="properity-form"> 
 
 
           <div class="row">
              <div class="col-md-4 form-group">
                     <h5 for="purpose"><b>Purpose:</b></h5>
-                    <select id="Purpose" name="Purpose" class="form-control">
+                    <select id="Purpose" name="Purpose" class="form-control" required="">
+                        <option value disabled selected>Select Purpose</option>
                         <option value="Sale">Sale</option>
                         <option value="Rent">Rent</option>
                     </select>
@@ -152,7 +205,7 @@ function getProname(val) {
             <div class="col-md-4 form-group">
                 <h5 for="type"><b>Type:</b></h5>
                     
-<select name="Property_type" id="Property_type" class="form-control" onChange="getProname(this.value);">
+<select name="Property_type" id="Property_type" required="" class="form-control" onChange="getProname(this.value);">
 <option value disabled selected>Select Type</option>
 <?php
 foreach($results as $country) {
@@ -166,7 +219,7 @@ foreach($results as $country) {
             
             <div class="col-md-4 form-group">
                 <h5 for="stype"><b>Sub Type: </b></h5>
-<select name="subtype" id="state-list" class="form-control select2" onChange="getCity(this.value);">
+<select name="subtype" id="state-list" required="" class="form-control select2" onChange="getCity(this.value);">
 <option value="">Select Sub Type</option>
 </select>
             </div>
@@ -210,7 +263,7 @@ echo "<option value='$city_name'>$city_name</option>";
         <div class="row">
             <div class="col-md-12 form-group">
                 <h5><b>Discription:</b></h5>
-                <textarea rows = "5" cols = "64" name = "Description" placeholder="Enter Description" class="form-control"></textarea>
+                <textarea rows = "5" cols = "64" name = "Description" placeholder="Enter Description" class="form-control" required=""></textarea>
             </div>
         </div>
 
@@ -222,7 +275,7 @@ echo "<option value='$city_name'>$city_name</option>";
 
             <div class="col-md-4 form-group">
                 <h5 for="Description"><b>Area Land:</b></h5>
-                <input type="text" id="Land_area" name="Land_area" placeholder="Area Land" required class="form-control">
+                <input type="number" id="Land_area" name="Land_area" placeholder="Area Land" required class="form-control"  min=1 oninput="validity.valid||(value='');">
             </div>
 
             <div class="col-md-4 form-group">
@@ -279,25 +332,33 @@ echo "<option value='$city_name'>$city_name</option>";
 
             <div class="col-md-4 form-group">
                 <h5 for="phone_no"><b>Phone No:</b></h5>
-                <input type="number" id="phone_no" name="phone_no" placeholder="Phone No" required class="form-control">
+                <input type="tel" id="phone_no" name="phone_no" placeholder="+923009999999" required class="form-control"pattern='[\+]\d{2}\d{2}\d{4}\d{4}' title='Phone Number (Format: +929999999999)'>
             </div>
             
             <div class="col-md-4 form-group">
                 <label for="Cell No"><b>Cell No:</b></label>
-                <input type="number" id="cell_no" name="cell_no" placeholder="Cell No" required class="form-control">
+                <input type="tel" id="cell_no" name="cell_no" placeholder="+923009999999" required class="form-control" pattern='[\+]\d{2}\d{2}\d{4}\d{4}' title='Phone Number (Format: +929999999999)'>
             </div>
             
             <div class="col-md-4 form-group has-feedback">
                 <h5 for="Email"><b>Email:</b></h5>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                <input type="Email" id="Email" name="Email" placeholder="Property Title" required class="form-control">
+                <input type="Email" id="Email" name="Email" placeholder="Email Address" required class="form-control">
             </div>
         </div>
-                     
-
 
 
 <?php 
+$randomid = mt_rand(100000,999999); 
+//echo $randomid; 
+?>
+<input type="hidden" name="max_num" id="max_num" required value="<?php 
+
+echo $randomid; 
+?>">
+
+<?php
+
 $sql = "SELECT * FROM login where username = '".$_SESSION['username'] ."'";
 if($result = mysqli_query($conn, $sql)){
     if(mysqli_num_rows($result) > 0){
@@ -310,17 +371,56 @@ if($result = mysqli_query($conn, $sql)){
         
         // Free result set
         mysqli_free_result($result);
-    } else{
+    } 
+    else{
         echo "No records matching your query were found.";
     }
-} else{
+}
+ else{
     echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
 }
  
 // Close connection
-mysqli_close($conn);
+//mysqli_close($conn);
 ?>
 
+<input type="hidden" name="date_time" placeholder="Date" class="form-control name_list" value="<?php echo date('m/d/Y h:i:s', time());
+
+?>
+" />
+
+<input type="hidden" name="statuss" placeholder="status" class="form-control name_list" value="Pending" />
+
+
+    <button type="submit" class="btn btn-responsive btn-primary btn-sm"  name="addcat" data-toggle="tooltip" data-placement="bottom" title="Insert Data!">Submit</button>
+    </form>
+
+
+            <form method="post" name="image_upload_form" id="image_upload_form" enctype="multipart/form-data" action="upload_image.php" class="properity-form"> 
+
+            <?php
+            $sql = "SELECT * FROM login where username = '".$_SESSION['username'] ."'";
+            if($result = mysqli_query($conn, $sql)){
+            if(mysqli_num_rows($result) > 0){
+            while($row = mysqli_fetch_array($result)){
+            echo '<input type="hidden" id="customer_id" name="customer_id" value='.$row['id'].'><br/>';
+        }
+        
+        mysqli_free_result($result);
+    } 
+    else{
+        echo "No records matching your query were found.";
+    }
+}
+ else{
+    echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
+} ?>
+
+
+<input type="hidden" name="max_num" id="max_num" required value="<?php 
+
+echo $randomid; 
+?>">
 
             <div class="form-group">
               <label for="exampleInputPassword1">Images (Choose Multiple Images to Upload)</label>
@@ -332,7 +432,6 @@ mysqli_close($conn);
         <label>&nbsp;</label>
         <img src="image_upload_status.gif" alt="Image Uploading......"/>
     </div>
-    <input type="submit" name="images" value="submit">
 	</form>
 	<br>
 	<div id="images_preview"></div>
